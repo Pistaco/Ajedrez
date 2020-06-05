@@ -1,0 +1,15 @@
+WELCOME TO THE CHESS!!!
+The notation to move the pieces is the next:
+
+First specify the piece:
+K: King
+Q: Queen
+R: Tower
+B: Bishop
+N: Horse
+P: Pawn
+Then specify the coordinates, first the row (A, B, C) and the column (1, 2, 3)
+First of all, specify the place of the piece and then the place where you want to move it (if you captured a piece enter a x in the notation)
+For example: PG2 to F2 or RA2 to xA8
+
+That is all, get fun:)
