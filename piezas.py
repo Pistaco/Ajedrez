@@ -7,7 +7,7 @@ class Pieza:
         self.tablero.MD(origen, "")
         self.tablero.MD(destino, get)
     
-    def _colision_detector(self, destino):
+    def colision_detector(self, destino):
         if self.tablero.GET(destino, True) is not True:
             return True
         return False

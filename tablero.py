@@ -1,6 +1,7 @@
 class Tablero:
     """Clase cuya unica funcion es manejar los datos del tablero.
     """
+
     def __init__(self):
         """Crear el diccionario de datos.
 
@@ -34,24 +35,24 @@ class Tablero:
                     valores = f"{valores} [  ]"
             print(f"({k}) {valores}")
 
-    def MD(self, origen: "PG1", objeto: "WP"):
+    def MD(self, origen, objeto):
         """Funcion que te permite modificar el diccionario del tablero.
 
         El primer parametro debe estar en el formato de coordenadas (P: Pieza, G: Row, 1: Column) y ademas tener
         siempre una longitud de 3, de lo contrario arrojara error 
         El segundo parametro  debe ser lo que desees sobrescribir
 
-        """  
-        Pieza, row, columna= tuple(origen)
-        self.data[row.upper()][int(columna)] = objeto 
-    
-    def GET(self, origen: "PG1", bol: bool=False):
+        """
+        Pieza, row, columna = origen
+        self.data[row][columna] = objeto
+
+    def GET(self, origen, bol: bool = False):
         """Funcion que te permite obtener una valor del tablero.
         origen = coordenadas
         bol = el valor lo puedes tener en bool
         """
         Pieza, row, columna = tuple(origen)
-        data = self.data[row][int(columna)]
+        data = self.data[row][columna]
         if bol:
             return bool(data)
         return data
