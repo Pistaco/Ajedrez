@@ -34,11 +34,8 @@ class Ajedres:
         while True:
             coo = self._info_("Que pieza desea mover?\n")
             plz = self._info_("Hacia donde quiere moverla?\n")
-            if self.piezas.colision_detector(plz):
-                self.piezas.mover(coo, plz)
+            if self.piezas.mover(coo, plz):
                 break
-            else:
-                print("ya hay una pieza aqui")
 
     def run(self):
         while True:
