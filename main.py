@@ -17,15 +17,16 @@ class Ajedres:
     def _info_(self, pregunta):
         while True:
             input_ = input(pregunta)
+            keys = tuple("ABCDEFGH")
             if len(input_) == 3:
                 a, b, c = input_
                 b, c = b.upper(), int(c)
-                if b not in tuple("ABCDEFGH"):
+                if b not in keys:
                     print("ingresaste un valor incorrecto")
                 elif c not in tuple(range(1, 8)):
                     print("ingresaste un valor incorrecto")
                 else:
-                    tupla = (a, b, c)
+                    tupla = (a, keys.index(b), c - 1)
                     return tupla
             else:
                 print("Valor demasiado largo")

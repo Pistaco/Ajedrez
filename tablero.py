@@ -9,31 +9,32 @@ class Tablero:
         Numeros: column
         """
 
-        self.data = {
-            "A": {1: "BR", 2: "BB", 3: "BN", 4: "BK", 5: "BQ", 6: "BN", 7: "BB", 8: "BR"},
-            "B": {1: "BP", 2: "BP", 3: "BP", 4: "BP", 5: "BP", 6: "BP", 7: "BP", 8: "BP"},
-            "C": {1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: ""},
-            "D": {1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: ""},
-            "E": {1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: ""},
-            "F": {1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: ""},
-            "G": {1: "WP", 2: "WP", 3: "WP", 4: "WP", 5: "WP", 6: "WP", 7: "WP", 8: "WP"},
-            "H": {1: "WR", 2: "WB", 3: "WN", 4: "WK", 5: "WQ", 6: "WN", 7: "WB", 8: "WR"},
-        }
+        self.data = [
+            ["BR", "BB", "BN", "BK", "BQ", "BN", "BB", "BR"],
+            ["BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
+            ["WR", "WB", "WN", "WK", "WQ", "WN", "WB", "WR"]
+        ]
 
+        self.keys = tuple("ABCDEFGH")
     def display(self):
         """
         Mostrar el tablero en pantalla.
         """
 
         print("     (#1) (#2) (#3) (#4) (#5) (#6) (#7) (#8)")
-        for k, v in self.data.items():
+        for x, k in enumerate(self.data):
             valores = ""
-            for V in v.values():
+            for V in k:
                 if V:
                     valores = f"{valores} [{V}]"
                 else:
                     valores = f"{valores} [  ]"
-            print(f"({k}) {valores}")
+            print(f"({self.keys[x]}) {valores}")
 
     def MD(self, origen, objeto):
         """Funcion que te permite modificar el diccionario del tablero.
@@ -43,7 +44,7 @@ class Tablero:
         El segundo parametro  debe ser lo que desees sobrescribir
 
         """
-        Pieza, row, columna = origen
+        row, columna = origen[1:]
         self.data[row][columna] = objeto
 
     def GET(self, origen, bol: bool = False):
@@ -51,7 +52,7 @@ class Tablero:
         origen = coordenadas
         bol = el valor lo puedes tener en bool
         """
-        Pieza, row, columna = tuple(origen)
+        row, columna = origen[1:]
         data = self.data[row][columna]
         if bol:
             return bool(data)
