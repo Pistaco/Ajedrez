@@ -1,11 +1,10 @@
-from piezas import Pieza
+from piezas import Pieza, Peon
 from tablero import Tablero
 
 
 class Ajedres:
     def __init__(self):
         self.tablero = Tablero()
-        self.piezas = Pieza(self.tablero)
         self.turnoactual = "W"
 
     def __switchturn(self):
@@ -20,8 +19,10 @@ class Ajedres:
             keys = tuple("ABCDEFGH")
             if len(input_) == 3:
                 a, b, c = input_
-                b, c = b.upper(), int(c)
-                if b not in keys:
+                a, b, c = a.upper() ,b.upper(), int(c)
+                if a not in "KQRBNP":
+                    print("no ingresaste una pieza valida")
+                elif b not in keys:
                     print("ingresaste un valor incorrecto")
                 elif c not in tuple(range(1, 8)):
                     print("ingresaste un valor incorrecto")
@@ -35,8 +36,20 @@ class Ajedres:
         while True:
             coo = self._info_("Que pieza desea mover?\n")
             plz = self._info_("Hacia donde quiere moverla?\n")
-            if self.piezas.mover(coo, plz):
-                break
+            if self._Seleccionador_(coo):
+                if self.pactual.mover(coo, plz):
+                    break
+
+    def _Seleccionador_(self, coo):
+        PD = {"P": Peon}
+        seleccionada = PD.get(coo[0])
+        get = self.tablero.GET(coo)[1]
+        if coo[0] == get:
+            self.pactual = seleccionada(self.tablero)
+            return True
+        print("La pieza que escribiste no coincide con la que esta en el tablero")
+        return False
+         
 
     def run(self):
         while True:
