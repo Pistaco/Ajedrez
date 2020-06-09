@@ -42,10 +42,10 @@ class Ajedres:
     def turno(self):
         while True:
             coo = self._info_("Que pieza desea mover?\n")
-            plz = self._info_("Hacia donde quiere moverla?\n")
             if self.tablero.GET(coo, bol=True) is False:
                 print("No existe pieza donde seleccionaste")
             elif self._Seleccionador_(coo):
+                plz = self._info_("Hacia donde quiere moverla?\n")
                 if self.pactual.mover(coo, plz):
                     break
 
