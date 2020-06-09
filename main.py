@@ -58,7 +58,6 @@ class Ajedres:
             return True
         print("La pieza que escribiste no coincide con la que esta en el tablero")
         return False
-         
 
     def run(self):
         while True:

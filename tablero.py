@@ -1,3 +1,4 @@
+import numpy as num
 class Tablero:
     """Clase cuya unica funcion es manejar los datos del tablero.
     """
@@ -9,7 +10,7 @@ class Tablero:
         Numeros: column
         """
 
-        self.data = [
+        self.data = num.array([
             ["BR", "BB", "BN", "BK", "BQ", "BN", "BB", "BR"],
             ["BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"],
             ["", "", "", "", "", "", "", ""],
@@ -18,7 +19,7 @@ class Tablero:
             ["", "", "", "", "", "", "", ""],
             ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
             ["WR", "WB", "WN", "WK", "WQ", "WN", "WB", "WR"]
-        ]
+        ])
 
         self.keys = tuple("ABCDEFGH")
     def display(self):
@@ -37,7 +38,7 @@ class Tablero:
             print(f"({self.keys[x]}) {valores}")
 
     def MD(self, origen, objeto):
-        """Funcion que te permite modificar el diccionario del tablero.
+        """Funcion que te permite modificar la matriz del tablero.
 
         El primer parametro debe estar en el formato de coordenadas (P: Pieza, G: Row, 1: Column) y ademas tener
         siempre una longitud de 3, de lo contrario arrojara error 
@@ -45,7 +46,7 @@ class Tablero:
 
         """
         row, columna = origen[1:]
-        self.data[row][columna] = objeto
+        self.data[row, columna] = objeto
 
     def GET(self, origen, bol: bool = False):
         """Funcion que te permite obtener una valor del tablero.
@@ -53,7 +54,7 @@ class Tablero:
         bol = el valor lo puedes tener en bool
         """
         row, columna = origen[1:]
-        data = self.data[row][columna]
+        data = self.data[row, columna]
         if bol:
             return bool(data)
         return data
