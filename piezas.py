@@ -4,51 +4,64 @@ class Pieza:
     """
     def __init__(self, tablero):
         self.tablero = tablero
-
-    def mover(self, origen: tuple, destino: tuple):
+        self.data = tablero.data
+    def mover(self):
         """Funcion que se encarga de mover la pieza.
 
-        esta funcion evalua todas las condiciones para que una pieza logre moverse las cuales son:
-
-        -que no exista pieza en el destino
-        -que cumpla el movimiento permitido de cada pieza (peon, caballo, ect)
-        -que no hallan piezas estorbando
+        esta funcion modifica la matriz y reeplaza los valores correspndientes
         """
+        if self.check:
+            get = self.tablero.GET(self.origen)
+            self.tablero.MD(self.destino, get)
+            self.tablero.MD(self.origen, "")
+    
+    def accion(self, origen, destino):
+        self.check = True
         self.origen = origen
         self.destino = destino
-        bypas = self.movimiento_permitido()
-
-        get = self.tablero.GET(self.origen)
-        if self._colision_detector(self.destino) and bypas:
-            # Evalua si existe una pieza en el destino
-            self.tablero.MD(self.origen, "")
-            self.tablero.MD(self.destino, get)
-            return True
-        if bypas is False:
-            # Evalua si el movimiento es permitido
-            print("Infrige el movimiento permitido de la pieza")
-            return False
-        print("Ya existe una pieza en el destino")
-        return False
+        self.movimiento_permitido()
+        self._colision_detector()
+        self.mover()
+        return self.check 
 
     def movimiento_permitido(self):
         return True
 
-    def _colision_detector(self, destino):
+    def _colision_detector(self):
         """condicional que te detecta si hay piezas en el destino y si hay piezas estorbando."""
-
-        if not self.tablero.GET(self.destino, True):
-            return True
-        return False
+        if self.tablero.GET(self.destino):
+            self.check = False
+            print("Ya existe una pieza en el destino")
 
 
 class Peon(Pieza):
 
     def movimiento_permitido(self):
-        if self.origen[1] - 1 == self.destino[1] and self.origen[2] == self.destino[2]:
-            return True
-        elif (self.origen[1] - 1 == self.destino) is not True:
-            print("row no permitida para el tipo de pieza")
-        elif (self.origen[2] == self.destino) is not True:
-            print("columna no permitida para la pieza")
-        return False
+
+        def help_(Turno):
+            if Turno == "W":
+                valor = -1
+            elif Turno == "B":
+                valor = 1
+            return valor
+
+        def movimiento_(valor):
+            row1, column1 = self.origen[1:]
+            row2, column2 = self.destino[1:]
+            if row1 + valor == row2 and column1 == column2:
+                pass
+            elif row1 + valor != row2:
+                print("row no permitida para el tipo de pieza")
+            elif column1 != column2:
+                print("columna no permitida para la pieza")
+            self.check = False
+
+        direccion = self.tablero.GET(self.origen)
+        valor = help_(direccion[0])
+        movimiento_(valor)        
+
+class Torre(Pieza):
+    def movimiento_permitido(self):
+        pass
+class Alfil(Pieza):
+    pass 

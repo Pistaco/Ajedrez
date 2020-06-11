@@ -19,6 +19,7 @@ class Ajedres:
     def __init__(self):
         self.tablero = Tablero()
         self.turnoactual = "W"
+        self.check = True
 
     def __switchturn(self):
         if self.turnoactual == "W":
@@ -27,42 +28,79 @@ class Ajedres:
             self.turnoactual = "W"
 
     def _info_(self, pregunta):
-        while True:
-            input_ = input(pregunta)
+
+        def check_len(origen):
+            orige = len(origen)
+            if opciones_(orige, 3, "Valor demasidado largo", "==") == False:
+                self.check = False
+
+        def check_column(origen):
+            try:
+                orige = int(origen[2])
+            except:
+                print("columna invalida")
+                self.check = False
+                pass
+            if opciones_(orige, range(1,9), "Columna invalida") == False:
+                self.check = False
+            return orige - 1
+
+        def check_row(origen):
+            orige = origen[1].upper()
             keys = tuple("ABCDEFGH")
-            if opciones_(len(input_), 3, "Ingresaste un valor demasiado largo", "=="):
-                a, b, c = input_
-                a, b, c = a.upper() ,b.upper(), int(c)
-                if opciones_(a, "KQRBNP", "no ingresaste una pieza valida"):
-                    if opciones_(b, keys, "ingresaste una row incorrecta"):
-                        if opciones_(c, tuple(range(1,8)), "ingresaste una columna incorrecta"):
-                            tupla = (a, keys.index(b), c - 1)
-                            return tupla
+            if opciones_(orige, "ABCDEFGH", "Row invalida") == False:
+                self.check = False
+            return keys.index(orige)
+
+        def check_pieza(origen):
+            orige = origen[0].upper()
+            if opciones_(orige, "KQRBNP", "Pieza no valida") == False:
+                self.check = False
+            return orige
+
+        while True:
+            self.check = True
+            _input = input(pregunta)
+            check_len(_input)
+            R = check_row(_input)
+            C = check_column(_input)
+            P = check_pieza(_input)
+            if self.check:
+                break
+        return P, R, C
 
     def turno(self):
         while True:
             coo = self._info_("Que pieza desea mover?\n")
-            if self.tablero.GET(coo, bol=True) is False:
-                print("No existe pieza donde seleccionaste")
-            elif self._Seleccionador_(coo):
-                plz = self._info_("Hacia donde quiere moverla?\n")
-                if self.pactual.mover(coo, plz):
+            self.Seleccionador_(coo)
+            self.check_turno(coo)
+            if self.check:
+                plz = self._info_("Hacia donde desea moverla?\n")
+                a = self.pactual.accion(coo, plz)
+                print(a)
+                if a:
                     break
 
-    def _Seleccionador_(self, coo):
+    def check_turno(self, origen):
+        get = self.tablero.GET(origen)
+        if get[0] != self.turnoactual:
+            self.check = False
+    
+    def Seleccionador_(self, coo):
         PD = {"P": Peon}
         seleccionada = PD.get(coo[0])
         get = self.tablero.GET(coo)[1]
         if coo[0] == get:
             self.pactual = seleccionada(self.tablero)
-            return True
-        print("La pieza que escribiste no coincide con la que esta en el tablero")
-        return False
+        else:
+            print("La pieza que escribiste no coincide con la que esta en el tablero")
+            self.check = False
 
     def run(self):
         while True:
             self.tablero.display()
             self.turno()
+            self.__switchturn()
 
 
 test = Ajedres()
