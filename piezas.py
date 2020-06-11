@@ -16,23 +16,20 @@ class Pieza:
         """
         self.origen = origen
         self.destino = destino
+        bypas = self.movimiento_permitido()
 
         get = self.tablero.GET(self.origen)
-        if self._colision_detector(self.destino) and self.movimiento_permitido():
+        if self._colision_detector(self.destino) and bypas:
             # Evalua si existe una pieza en el destino
             self.tablero.MD(self.origen, "")
             self.tablero.MD(self.destino, get)
             return True
-        if self.movimiento_permitido() is False:
+        if bypas is False:
             # Evalua si el movimiento es permitido
             print("Infrige el movimiento permitido de la pieza")
             return False
         print("Ya existe una pieza en el destino")
         return False
-
-    def Atributos(self, movimiento, sigla):
-        self.movimiento = movimiento
-        self.sigla = sigla 
 
     def movimiento_permitido(self):
         return True
@@ -46,16 +43,12 @@ class Pieza:
 
 
 class Peon(Pieza):
-    def __init__(self, tablero):
-        super().__init__(tablero)
-        super().Atributos((1, 0), "P")
 
     def movimiento_permitido(self):
-        oR, oc = self.origen[1:]
-        dr, dc = self.destino[1:]
-        pR, pc = self.movimiento
-        print(oR, oc)
-        print(dr, dc)
-        if dc == oc and oR - 1 == dr:
+        if self.origen[1] - 1 == self.destino[1] and self.origen[2] == self.destino[2]:
             return True
+        elif (self.origen[1] - 1 == self.destino) is not True:
+            print("row no permitida para el tipo de pieza")
+        elif (self.origen[2] == self.destino) is not True:
+            print("columna no permitida para la pieza")
         return False
