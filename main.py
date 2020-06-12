@@ -24,7 +24,7 @@ class Ajedres:
     def __switchturn(self):
         if self.turnoactual == "W":
             self.turnoactual = "B"
-        if self.turnoactual == "B":
+        elif self.turnoactual == "B":
             self.turnoactual = "W"
 
     def _info_(self, pregunta):
@@ -40,7 +40,7 @@ class Ajedres:
             except:
                 print("columna invalida")
                 self.check = False
-                pass
+                return False
             if opciones_(orige, range(1,9), "Columna invalida") == False:
                 self.check = False
             return orige - 1
@@ -50,6 +50,7 @@ class Ajedres:
             keys = tuple("ABCDEFGH")
             if opciones_(orige, "ABCDEFGH", "Row invalida") == False:
                 self.check = False
+                return False
             return keys.index(orige)
 
         def check_pieza(origen):
@@ -74,6 +75,7 @@ class Ajedres:
             coo = self._info_("Que pieza desea mover?\n")
             self.Seleccionador_(coo)
             self.check_turno(coo)
+            print(self.check)
             if self.check:
                 plz = self._info_("Hacia donde desea moverla?\n")
                 a = self.pactual.accion(coo, plz)
@@ -84,6 +86,7 @@ class Ajedres:
     def check_turno(self, origen):
         get = self.tablero.GET(origen)
         if get[0] != self.turnoactual:
+            print("Solo puedes seleccionar piezas de tu bando")
             self.check = False
     
     def Seleccionador_(self, coo):
@@ -98,6 +101,7 @@ class Ajedres:
 
     def run(self):
         while True:
+            print(self.turnoactual)
             self.tablero.display()
             self.turno()
             self.__switchturn()

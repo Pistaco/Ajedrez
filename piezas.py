@@ -14,6 +14,7 @@ class Pieza:
             get = self.tablero.GET(self.origen)
             self.tablero.MD(self.destino, get)
             self.tablero.MD(self.origen, "")
+        print(self.check,"Piezas: 2")
     
     def accion(self, origen, destino):
         self.check = True
@@ -32,6 +33,7 @@ class Pieza:
         if self.tablero.GET(self.destino):
             self.check = False
             print("Ya existe una pieza en el destino")
+        print(self.check, "Piezas: 1")
 
 
 class Peon(Pieza):
@@ -48,17 +50,20 @@ class Peon(Pieza):
         def movimiento_(valor):
             row1, column1 = self.origen[1:]
             row2, column2 = self.destino[1:]
-            if row1 + valor == row2 and column1 == column2:
-                pass
-            elif row1 + valor != row2:
+            check = 0
+            if (row1 + valor) != row2:
                 print("row no permitida para el tipo de pieza")
-            elif column1 != column2:
+                check += 1
+            if column1 != column2:
                 print("columna no permitida para la pieza")
-            self.check = False
+                check += 1
+            if check > 0:
+                self.check = False
 
         direccion = self.tablero.GET(self.origen)
         valor = help_(direccion[0])
         movimiento_(valor)        
+        print(self.check, "Piezas: 0")
 
 class Torre(Pieza):
     def movimiento_permitido(self):
