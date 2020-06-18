@@ -1,7 +1,8 @@
 from piezas import Pieza, Peon
 from tablero import Tablero
 
-def opciones_(evaluar, opciones, mensaje, operador = "negacion"):
+
+def opciones_(evaluar, opciones, mensaje, operador="negacion"):
     if operador == "negacion":
         if evaluar not in opciones:
             print(mensaje)
@@ -31,7 +32,7 @@ class Ajedres:
 
         def check_len(origen):
             orige = len(origen)
-            if opciones_(orige, 3, "Valor demasidado largo", "==") == False:
+            if not opciones_(orige, 3, "Valor demasidado largo", "=="):
                 self.check = False
 
         def check_column(origen):
@@ -41,21 +42,21 @@ class Ajedres:
                 print("columna invalida")
                 self.check = False
                 return False
-            if opciones_(orige, range(1,9), "Columna invalida") == False:
+            if not opciones_(orige, range(1, 9), "Columna invalida"):
                 self.check = False
             return orige - 1
 
         def check_row(origen):
             orige = origen[1].upper()
             keys = tuple("ABCDEFGH")
-            if opciones_(orige, "ABCDEFGH", "Row invalida") == False:
+            if not opciones_(orige, "ABCDEFGH", "Row invalida"):
                 self.check = False
                 return False
             return keys.index(orige)
 
         def check_pieza(origen):
             orige = origen[0].upper()
-            if opciones_(orige, "KQRBNP", "Pieza no valida") == False:
+            if not opciones_(orige, "KQRBNP", "Pieza no valida"):
                 self.check = False
             return orige
 
@@ -88,7 +89,7 @@ class Ajedres:
         if get[0] != self.turnoactual:
             print("Solo puedes seleccionar piezas de tu bando")
             self.check = False
-    
+
     def Seleccionador_(self, coo):
         PD = {"P": Peon}
         seleccionada = PD.get(coo[0])
