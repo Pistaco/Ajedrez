@@ -30,11 +30,7 @@ class Pieza:
         return True
 
     def _colision_detector(self):
-        """condicional que te detecta si hay piezas en el destino y si hay piezas estorbando."""
-        if self.tablero.GET(self.destino):
-            self.check = False
-            print("Ya existe una pieza en el destino")
-        print(self.check, "Piezas: 1")
+        return True
 
 
 class Peon(Pieza):

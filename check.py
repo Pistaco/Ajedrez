@@ -4,11 +4,9 @@ class Check:
     Verificar todos los parametros y arrojarlos a main()
     """
     def __init__(self, ai):
-        self.check = False
         self.rows = list("ABCDEFGH")
         self.columns = list("12345678")
         self.tablero = ai.tablero
-        self.ta = ai.turnoactual
 
     def input_(self, pregunta):
         """Verifica coordenadas tanto de origen como de destino, no hace cambios en los datos, solo los checkea.
@@ -26,39 +24,36 @@ class Check:
                     print("Row incorrecta")
                 elif valor[2] not in self.columns:  # 3)
                     print("columna incorrecta")
-                elif valor[0] not in "KQRBNP":
+                elif valor[0].upper() not in "KQRBNP":
                     print("pieza no valida")           # 4)
                 else:
                     return valor
+            else:
+                print("Demasiado largo")
 
-    def info(self):
-        """Pregunta por la informacion y la transforma a coordenadas.
+    def run(self):
+        """Funcion que se ejecuta en main(), pregunta por la informacion y la transforma a coordenadas.
 
+        Te traduce a formato que te pueda entender el index del tablero
 
         Tranformador de formato:
         ABCDEFGH -> 012345678
         str -> int
         lowercase -> UPPERCASE
+
+        Te arroja las tuplas correspondientes
         """
         pieza, row, column = self.input_("Que pieza desea mover?\n")
         piezaB, rowB, columnB = self.input_("Hacia donde desea moverla?\n")
         tupla1 = (pieza.upper(), self.rows.index(row.upper()), self.columns.index(column))
-        tupla2 = (piezaB.upper(), self.rows.index(rowB.upper(), self.columns.index(columnB)))
+        tupla2 = (piezaB.upper(), self.rows.index(rowB.upper()), self.columns.index(columnB))
+        print(tupla1, tupla2)
         return tupla1, tupla2
 
-    def run(self):
-        """Todos los procesos en conjunto.
+    def check_get(self, origen, destino):
+        get1 = self.tablero.GET(origen)
+        get2 = self.tablero.GET(destino)
 
-        4) Pieza
-        5) Turno
-        """
-        while True:
-            coo, poo = self.info()
-            get1 = self.tablero.GET(coo)
-            get2 = self.tablero.GET(poo)
-            if get1[0] != self.ta and get2[0] != self.ta:
-                print("No es tu turno para mover esta pieza")
-            elif get1[1] != coo[0] and get2[1] != poo[0]:
-                print("La pieza no coincide con el tablero")
-            else:
-                break
+        def check_pieza(evaluar):
+            if get1[1] == evaluar and get2[1] == evaluar:
+                return True

@@ -1,4 +1,6 @@
 import numpy as num
+
+
 class Tablero:
     """Clase cuya unica funcion es manejar los datos del tablero.
     """
@@ -22,6 +24,7 @@ class Tablero:
         ])
 
         self.keys = tuple("ABCDEFGH")
+
     def display(self):
         """
         Mostrar el tablero en pantalla.
