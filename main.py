@@ -79,7 +79,7 @@ class Ajedres:
             print(self.check)
             if self.check:
                 plz = self._info_("Hacia donde desea moverla?\n")
-                a = self.pactual.accion(coo, plz)
+                a = self.pactual(self.tablero, coo, plz).accion()
                 print(a)
                 if a:
                     break
@@ -95,7 +95,7 @@ class Ajedres:
         seleccionada = PD.get(coo[0])
         get = self.tablero.GET(coo)[1]
         if coo[0] == get:
-            self.pactual = seleccionada(self.tablero)
+            self.pactual = seleccionada
         else:
             print("La pieza que escribiste no coincide con la que esta en el tablero")
             self.check = False

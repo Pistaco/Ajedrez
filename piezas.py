@@ -2,9 +2,13 @@ class Pieza:
     """
     Clase que encarga de manejar las piezas y las funciones asociadas a ellas.
     """
-    def __init__(self, tablero):
+    def __init__(self, tablero, origen, destino):
         self.tablero = tablero
         self.data = tablero.data
+        self.check = True
+        self.origen = origen
+        self.destino = destino
+
     def mover(self):
         """Funcion que se encarga de mover la pieza.
 
@@ -14,12 +18,9 @@ class Pieza:
             get = self.tablero.GET(self.origen)
             self.tablero.MD(self.destino, get)
             self.tablero.MD(self.origen, "")
-        print(self.check,"Piezas: 2")
+        print(self.check, "Piezas: 2")
     
-    def accion(self, origen, destino):
-        self.check = True
-        self.origen = origen
-        self.destino = destino
+    def accion(self):
         self.movimiento_permitido()
         self._colision_detector()
         self.mover()
@@ -49,6 +50,7 @@ class Peon(Pieza):
 
         def movimiento_(valor):
             row1, column1 = self.origen[1:]
+
             row2, column2 = self.destino[1:]
             check = 0
             if (row1 + valor) != row2:
@@ -65,8 +67,14 @@ class Peon(Pieza):
         movimiento_(valor)        
         print(self.check, "Piezas: 0")
 
+
 class Torre(Pieza):
     def movimiento_permitido(self):
         pass
+
+    def _colision_detector(self):
+        pass
+
+
 class Alfil(Pieza):
-    pass 
+    pass
