@@ -25,14 +25,14 @@ class Check:
                 elif valor[2] not in self.columns:  # 3)
                     print("columna incorrecta")
                 elif valor[0].upper() not in "KQRBNP":
-                    print("pieza no valida")           # 4)
+                    print("pieza no valida")          # 4)
                 else:
                     return valor
             else:
                 print("Demasiado largo")
 
-    def run(self):
-        """Funcion que se ejecuta en main(), pregunta por la informacion y la transforma a coordenadas.
+    def traductor(self):
+        """Funcion que pregunta por la informacion y la transforma a coordenadas.
 
         Te traduce a formato que te pueda entender el index del tablero
 
@@ -47,13 +47,43 @@ class Check:
         piezaB, rowB, columnB = self.input_("Hacia donde desea moverla?\n")
         tupla1 = (pieza.upper(), self.rows.index(row.upper()), self.columns.index(column))
         tupla2 = (piezaB.upper(), self.rows.index(rowB.upper()), self.columns.index(columnB))
-        print(tupla1, tupla2)
-        return tupla1, tupla2
+        self.origen = tupla1
+        self.destino = tupla2
 
     def check_get(self, origen, destino):
-        get1 = self.tablero.GET(origen)
-        get2 = self.tablero.GET(destino)
+        """Funcion que verifica si existe pieza en el destino y ademas si existe pieza en el origen.
+        """
 
-        def check_pieza(evaluar):
-            if get1[1] == evaluar and get2[1] == evaluar:
-                return True
+        self.get1 = self.tablero.GET(origen)
+        self.get2 = self.tablero.GET(destino)
+        if self.get1 and not self.get2:
+            return True
+        elif not self.get1:
+            print("No existe pieza en el origen")
+            return False
+        elif self.get2:
+            print("Ya existe una pieza en el destino")
+            return False
+        else:
+            print("Algo paso")
+            raise
+
+    def check_p(self, valor, get):
+        if valor[0] == get[1]:
+            return True
+        else:
+            print("La pieza no coincide con la del tablero")
+            return False
+
+    def run(self):
+        """Funcion que se ejecuta en main() y junta todos los procesos.
+        Hay 2 bucle while, el primero es para hacer las tuplas traducidas y el segundo es para verificar
+        los datos en el tablero"""
+
+        while True:
+            self.traductor()
+            if self.check_get(self.origen, self.destino):
+                checkorigen = self.check_p(self.origen, self.get1)
+                checkdestino = self.check_p(self.destino, self.get1)
+                if checkdestino and checkorigen:
+                    return self.origen, self.destino

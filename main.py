@@ -16,9 +16,9 @@ class Ajedres:
 
     def turno(self):
         while True:
-            coo, plz = self.check.run(self.turnoactual)
+            coo, plz = self.check.run()
             self.seleccionador_(coo)
-            if self.pactual(self.tablero, coo, plz).accion():
+            if self.pactual(self.tablero, coo, plz, self.turnoactual).accion():
                 break
 
     def seleccionador_(self, coo):
