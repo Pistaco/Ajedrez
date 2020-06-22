@@ -7,6 +7,8 @@ class Ajedres:
         self.tablero = Tablero()
         self.turnoactual = "W"
         self.check = Check(self)
+        self.texto = {"W": "Las blancas!", "B": "Las negras!"}
+        self.victoria = False
 
     def __switchturn(self):
         if self.turnoactual == "W":
@@ -16,20 +18,42 @@ class Ajedres:
 
     def turno(self):
         while True:
-            coo, plz = self.check.run()
-            self.seleccionador_(coo)
-            if self.pactual(self.tablero, coo, plz, self.turnoactual).accion():
+            self.coo, self.plz = self.check.run()
+            self.seleccionador_()
+            if self.pactual(self).accion():
                 break
 
-    def seleccionador_(self, coo):
+    def checklose(self):
+        matriz = self.tablero.data == "WK"
+        matriz2 = self.tablero.data == "BK"
+        if matriz.any() == False or matriz2.any() == False:
+            print("La partida termino, la victoria es para:", self.texto[self.turnoactual])
+            self.victoria = True
+
+    def cambiopeon(self):
+        if self.pactual == Peon and self.plz[1] == 0:
+            while True:
+                print("Puedes cambiar tu peon por cualquiera de las piezas salvo el rey, escoje una!")
+                respuesta = input("P R B N Q?\n").upper()
+                if respuesta in "PRBNQ":
+                    break
+                else:
+                    print("Ingrese un valor valido")
+            pieza =  self.turnoactual + respuesta
+            self.tablero.MD(self.plz, pieza)
+
+    def seleccionador_(self):
         PD = {"P": Peon, "R": Torre, "B": Alfil, "N": Caballo, "Q": Reina, "K": Rey}
-        seleccionada = PD.get(coo[0])
+        seleccionada = PD.get(self.coo[0])
         self.pactual = seleccionada
 
     def run(self):
-        while True:
+        while not self.victoria:
             self.tablero.display()
+            print("Ahora es el turno de:", self.texto[self.turnoactual])
             self.turno()
+            self.cambiopeon()
+            self.checklose()
             self.__switchturn()
 
 

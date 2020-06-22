@@ -23,15 +23,15 @@ class Pieza:
     """
     Clase que encarga de manejar las piezas y las funciones asociadas a ellas.
     """
-    def __init__(self, tablero, origen, destino, ta):
-        self.tablero = tablero
-        self.data = tablero.data
+    def __init__(self, ai):
+        self.tablero = ai.tablero
+        self.data = self.tablero.data
         self.check = True
-        self.origen = origen
-        self.destino = destino
-        self.ta = ta
-        self.get1 = self.tablero.GET(origen)
-        self.get2 = self.tablero.GET(destino)
+        self.origen = ai.coo
+        self.destino = ai.plz
+        self.ta = ai.turnoactual
+        self.get1 = self.tablero.GET(self.origen)
+        self.get2 = self.tablero.GET(self.destino)
         self.roworigen, self.columnorigen = self.origen[1:]
         self.rowdestino, self.columndestino = self.destino[1:]
 
@@ -43,7 +43,6 @@ class Pieza:
         if self.check:
             self.tablero.MD(self.destino, self.get1)
             self.tablero.MD(self.origen, "")
-        print(self.check, "Piezas: 2")
 
     def capturar(self):
         if self.get2:
@@ -85,26 +84,31 @@ class Peon(Pieza):
 
     def help_(self):
         if "W" == self.ta:
-            valor = -1
+            if self.roworigen == 6:
+                valor = (-1 ,-2)
+            else:
+                valor = (-1,)
         elif "B" == self.ta:
-            valor = 1
+            if self.roworigen == 1:
+                valor = (1, 2)
+            else:
+                valor = (1,)
         return valor
 
     def movimiento_permitido(self):
 
         def movimiento_(valor):
             check = 0
-            if (self.roworigen + valor) != self.rowdestino:
-                print("row no permitida para el tipo de pieza")
+            if (self.rowdestino - self.roworigen) not in valor:
+                print("row no permitida para el peon")
                 check += 1
             if self.columnorigen != self.columndestino:
-                print("columna no permitida para la pieza")
+                print("columna no permitida para el peon")
                 check += 1
             if check > 0:
                 self.check = False
 
         movimiento_(self.valor)
-        print(self.check, "Piezas: 0")
 
     def _colision_detector(self):
         if self.get2:
@@ -113,7 +117,7 @@ class Peon(Pieza):
 
     def capturar(self):
         if self.get2 and self.get2[0] != self.ta:
-            if self.roworigen + self.valor == self.rowdestino and abs(self.columnorigen - self.columndestino) == 1:
+            if self.roworigen + self.valor[0] == self.rowdestino and abs(self.columnorigen - self.columndestino) == 1:
                 return True
         return False
 
@@ -133,7 +137,7 @@ class Torre(Pieza):
         if self.roworigen == self.rowdestino or self.columnorigen == self.columndestino:
             return True
         else:
-            print("Solo movimiento horizontal permitido")
+            print("Solo movimiento horizontal permitido para la Torre")
             self.check = False
 
 
@@ -142,7 +146,7 @@ class Alfil(Pieza):
         if self.roworigen != self.rowdestino and self.columnorigen != self.columndestino:
             return True
         else:
-            print("Solo movimiento vertical permitido")
+            print("Solo movimiento vertical permitido para el Alfil")
             self.check = False
 
 
@@ -153,7 +157,7 @@ class Caballo(Pieza):
         colums = abs(self.columnorigen - self.columndestino)
         print(rows, colums)
         if (rows + colums) != 3:
-            print("Movimiento no valido")
+            print("Movimiento no valido para el caballo")
             self.check = False
 
     def _colision_detector(self):
@@ -172,5 +176,5 @@ class Rey(Pieza):
         if (rows == 1 or rows == 0) and (colums == 1 or colums == 0):
             return True
         else:
-            print("Movimiento no permitido")
+            print("Movimiento no permitido para el rey")
             self.check = False
