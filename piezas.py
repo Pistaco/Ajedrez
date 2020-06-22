@@ -1,3 +1,23 @@
+def colisionator(lista):
+    values = 0
+    for x in lista:
+        if x:
+            values += 1
+    if values == 1:
+        return True
+    else:
+        return False
+
+
+def lista(partida, destino):
+    if partida == destino:
+        return partida
+    else:
+        if partida < destino:
+            return range(partida, destino)
+        else:
+            return range(partida, destino, -1)
+
 class Pieza:
     """
     Clase que encarga de manejar las piezas y las funciones asociadas a ellas.
@@ -39,7 +59,12 @@ class Pieza:
         return True
 
     def _colision_detector(self):
-        return True
+        rows = lista(self.origen[1], self.destino[1])
+        columns = lista(self.origen[2], self.destino[2])
+        lista1 = self.data[rows, columns]
+        if not colisionator(lista1):
+            print("Hay una pieza estorbando")
+            self.check = False
 
 
 class Peon(Pieza):
@@ -71,14 +96,26 @@ class Peon(Pieza):
         movimiento_(valor)        
         print(self.check, "Piezas: 0")
 
-
-class Torre(Pieza):
-    def movimiento_permitido(self):
-        pass
-
     def _colision_detector(self):
         pass
 
+class Torre(Pieza):
+    def movimiento_permitido(self):
+        row, column = self.origen[1:]
+        row2, column2 = self.destino[1:]
+        if row == row2 or column == column2:
+            return True
+        else:
+            print("Solo movimiento horizontal permitido")
+            self.check = False
 
 class Alfil(Pieza):
-    pass
+    def movimiento_permitido(self):
+        row, column = self.origen[1:]
+        row2, column2 = self.destino[1:]
+        if row != row2 and column != column2:
+            return True
+        else:
+            print("Solo movimiento vertical permitido")
+            self.check = False
+

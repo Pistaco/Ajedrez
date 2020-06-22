@@ -1,4 +1,4 @@
-from piezas import Pieza, Peon
+from piezas import Pieza, Peon, Torre, Alfil
 from tablero import Tablero
 from check import Check
 
@@ -22,7 +22,7 @@ class Ajedres:
                 break
 
     def seleccionador_(self, coo):
-        PD = {"P": Peon}
+        PD = {"P": Peon, "R": Torre, "B": Alfil}
         seleccionada = PD.get(coo[0])
         self.pactual = seleccionada
 
