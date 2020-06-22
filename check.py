@@ -53,20 +53,12 @@ class Check:
     def check_get(self, origen, destino):
         """Funcion que verifica si existe pieza en el destino y ademas si existe pieza en el origen.
         """
-
         self.get1 = self.tablero.GET(origen)
-        self.get2 = self.tablero.GET(destino)
-        if self.get1 and not self.get2:
+        if self.get1:
             return True
         elif not self.get1:
             print("No existe pieza en el origen")
             return False
-        elif self.get2:
-            print("Ya existe una pieza en el destino")
-            return False
-        else:
-            print("Algo paso")
-            raise
 
     def check_p(self, valor, get):
         if valor[0] == get[1]:
