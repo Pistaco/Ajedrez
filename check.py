@@ -1,4 +1,3 @@
-
 class Check:
     """
     Verificar todos los parametros y arrojarlos a main()
@@ -6,9 +5,11 @@ class Check:
     def __init__(self, ai):
         self.rows = list("ABCDEFGH")
         self.columns = list("12345678")
-        self.tablero = ai.tablero
+        self.tablero = ai.Tablero
+        self.check = False
+        self.escape = False
 
-    def input_(self, pregunta):
+    def input_(self, respuesta):
         """Verifica coordenadas tanto de origen como de destino, no hace cambios en los datos, solo los checkea.
 
            Primero se encarga del input, seguido lo ingresa a un bucle y no sale hasta que cumpla los parametros:
@@ -16,41 +17,21 @@ class Check:
         2) Verifica si el row esta entre los valores permitidos
         3) Verifica si la column esta entre los valores permitidos
         4) Verifica si la pieza existe"""
-
-        while True:
-            valor = input(pregunta)
-            if len(valor) == 3:  # 1)
-                if valor[1].upper() not in self.rows:  # 2)
-                    print("Row incorrecta")
-                elif valor[2] not in self.columns:  # 3)
+        valor = respuesta
+        if len(valor) == 3:  # 1)
+            if valor[1] not in self.rows:  # 2)
+                print("Row incorrecta")
+            elif valor[2] not in self.columns:  # 3)
                     print("columna incorrecta")
-                elif valor[0].upper() not in "KQRBNP":
-                    print("pieza no valida")          # 4)
-                else:
-                    return valor
+            elif valor[0] not in "KQRBNP":
+                print("pieza no valida")          # 4)
             else:
-                print("Demasiado largo")
+                self.check = True
+                return valor
+        else:
+            print("Debes ingresar un valor igual a 3")
 
-    def traductor(self):
-        """Funcion que pregunta por la informacion y la transforma a coordenadas.
-
-        Te traduce a formato que te pueda entender el index del tablero
-
-        Tranformador de formato:
-        ABCDEFGH -> 012345678
-        str -> int
-        lowercase -> UPPERCASE
-
-        Te arroja las tuplas correspondientes
-        """
-        pieza, row, column = self.input_("Que pieza desea mover?\n")
-        piezaB, rowB, columnB = self.input_("Hacia donde desea moverla?\n")
-        tupla1 = (pieza.upper(), self.rows.index(row.upper()), self.columns.index(column))
-        tupla2 = (piezaB.upper(), self.rows.index(rowB.upper()), self.columns.index(columnB))
-        self.origen = tupla1
-        self.destino = tupla2
-
-    def check_get(self, origen, destino):
+    def check_get_(self, origen):
         """Funcion que verifica si existe pieza en el destino y ademas si existe pieza en el origen.
         """
         self.get1 = self.tablero.GET(origen)
@@ -68,14 +49,29 @@ class Check:
             return False
 
     def run(self):
-        """Funcion que se ejecuta en main() y junta todos los procesos.
-        Hay 2 bucle while, el primero es para hacer las tuplas traducidas y el segundo es para verificar
-        los datos en el tablero"""
-
         while True:
-            self.traductor()
-            if self.check_get(self.origen, self.destino):
-                checkorigen = self.check_p(self.origen, self.get1)
-                checkdestino = self.check_p(self.destino, self.get1)
-                if checkdestino and checkorigen:
-                    return self.origen, self.destino
+            self.origen = self.sub_run_("Que pieza desea mover?", True)
+            if self.escape:
+                return self.origen, None
+            self.destino = self.sub_run_("Hacia donde desea moverla?")
+            if self.check_get_(self.origen):
+                return self.origen, self.destino
+
+    def sub_run_(self, mensaje, enroque = False):
+        while not self.check:
+            valor = input(f"{mensaje}\n").upper()
+            if enroque:
+                if valor in ("**", "*"):
+                    self.escape = True
+                    return valor
+            self.input_(valor)
+        self.check = False
+        return valor[0], self.rows.index(valor[1]), self.columns.index(valor[2])
+
+
+
+
+
+
+
+

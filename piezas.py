@@ -24,7 +24,7 @@ class Pieza:
     Clase que encarga de manejar las piezas y las funciones asociadas a ellas.
     """
     def __init__(self, ai):
-        self.tablero = ai.tablero
+        self.tablero = ai.Tablero
         self.data = self.tablero.data
         self.check = True
         self.origen = ai.coo
