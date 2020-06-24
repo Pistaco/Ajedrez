@@ -22,20 +22,20 @@ class Ajedres:
 
             self.turnoactual = "W"
 
-    def check(self):
+    def _check_(self):
         while not self.turno:
             self.coo, self.plz = self.Check.run()
             self.checkenroque(self.coo)
             if self.oficial:
-                self.seleccionador_(self.coo)
+                self._seleccionador_(self.coo)
                 if self.turno:
                     self.turno = self.pactual(self).accion()
-                    self.ofical_run()
+                    self._ofical_run_()
             elif self.enroque:
-                self.enroque_run()
+                self._enroque_run_()
                 self.turno = True
 
-    def reset(self):
+    def _reset_(self):
         self.enroque = None
         self.oficial = None
         self.turno = False
@@ -44,21 +44,21 @@ class Ajedres:
         while not self.victoria:
             self.Tablero.display()
             print("Ahora es el turno de:", self.texto[self.turnoactual])
-            self.check()
-            self.reset()
+            self._check_()
+            self._reset_()
 
-    def ofical_run(self):
-        self.cambiopeon()
-        self.checklose()
-        self.checkrk()
+    def _ofical_run_(self):
+        self._cambiopeon_()
+        self._checklose_()
+        self._checkrk_()
         self.__switchturn()
 
-    def enroque_run(self):
+    def _enroque_run_(self):
         self.Enroque.enroque(self.coo)
         self.Enroque.contador2(self.turnoactual)
         self.__switchturn()
 
-    def checkenroque(self, coo):
+    def _checkenroque_(self, coo):
         if self.coo not in ("*", "**"):
             self.oficial = True
             self.enroque = False
@@ -89,18 +89,18 @@ class Ajedres:
         else:
             self.enroque = False
 
-    def checkrk(self):
+    def _checkrk_(self):
         if self.pactual == Torre or self.pactual == Rey:
             self.Enroque.contador(self.coo, self.turnoactual)
 
-    def checklose(self):
+    def _checklose_(self):
         matriz = self.Tablero.data == "WK"
         matriz2 = self.Tablero.data == "BK"
         if matriz.any() == False or matriz2.any() == False:
             print("La partida termino, la victoria es para:", self.texto[self.turnoactual])
             self.victoria = True
 
-    def cambiopeon(self):
+    def _cambiopeon_(self):
         if self.pactual == Peon and self.plz[1] == 0:
             while True:
                 print("Puedes cambiar tu peon por cualquiera de las piezas salvo el rey, escoje una!")
@@ -112,7 +112,7 @@ class Ajedres:
             pieza =  self.turnoactual + respuesta
             self.Tablero.MD(self.plz, pieza)
 
-    def seleccionador_(self, coo):
+    def _seleccionador_(self, coo):
         PD = {"P": Peon, "R": Torre, "B": Alfil, "N": Caballo, "Q": Reina, "K": Rey}
         seleccionada = PD.get(coo[0])
         get = self.Tablero.GET(coo)
@@ -121,6 +121,3 @@ class Ajedres:
             self.turno = True
         else:
             self.turno = False
-
-test = Ajedres()
-test.run()
