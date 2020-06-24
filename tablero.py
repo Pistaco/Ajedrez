@@ -19,8 +19,8 @@ class Tablero:
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
-            ["", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
-            ["WR", "", "", "WK", "WQ", "WN", "WB", "WR"]
+            ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
+            ["WR", "WB", "WN", "WK", "WQ", "WN", "WB", "WR"]
         ])
 
         self.keys = tuple("ABCDEFGH")

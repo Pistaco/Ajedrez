@@ -11,27 +11,59 @@ class Ajedres:
         self.Enroque = Enroque(self)
         self.texto = {"W": "Las blancas!", "B": "Las negras!"}
         self.victoria = False
-        self.escape = None
+        self.turno = False
+        self.enroque = None
+        self.oficial = None
 
     def __switchturn(self):
         if self.turnoactual == "W":
             self.turnoactual = "B"
         elif self.turnoactual == "B":
+
             self.turnoactual = "W"
 
-    def turno(self):
-        while True:
+    def check(self):
+        while not self.turno:
             self.coo, self.plz = self.Check.run()
-            if self.checkenroque(self.coo):
-                self.escape = True
-                self.Enroque.enroque(self.coo)
-                break
-            elif self.escape == False:
-                if self.seleccionador_(self.coo):
-                    if self.pactual(self).accion():
-                        break
+            self.checkenroque(self.coo)
+            if self.oficial:
+                self.seleccionador_(self.coo)
+                if self.turno:
+                    self.turno = self.pactual(self).accion()
+                    self.ofical_run()
+            elif self.enroque:
+                self.enroque_run()
+                self.turno = True
+
+    def reset(self):
+        self.enroque = None
+        self.oficial = None
+        self.turno = False
+
+    def run(self):
+        while not self.victoria:
+            self.Tablero.display()
+            print("Ahora es el turno de:", self.texto[self.turnoactual])
+            self.check()
+            self.reset()
+
+    def ofical_run(self):
+        self.cambiopeon()
+        self.checklose()
+        self.checkrk()
+        self.__switchturn()
+
+    def enroque_run(self):
+        self.Enroque.enroque(self.coo)
+        self.Enroque.contador2(self.turnoactual)
+        self.__switchturn()
 
     def checkenroque(self, coo):
+        if self.coo not in ("*", "**"):
+            self.oficial = True
+            self.enroque = False
+            return False
+
         check = False
         if self.turnoactual == "W":
             lista = self.Enroque.enroqueblancas
@@ -47,16 +79,16 @@ class Ajedres:
                 print("No puedes realizar enroque corto, ya moviste la torre")
             elif torre2:
                 print("No puedes realizar enroque largo, ya moviste la torre")
-            elif self.coo not in ("*", "**"):
-                self.escape = False
         elif enroque:
             print("No puedes realizar enroque, ya lo hiciste con anterioridad")
         elif rey:
             print("No puedes realizar enroque, ya moviste al rey")
-
         if check:
-            return self.Enroque.colisionador(coo, self.turnoactual)
-        return check
+            if self.Enroque.colisionador(coo, self.turnoactual):
+                self.enroque = True
+        else:
+            self.enroque = False
+
     def checkrk(self):
         if self.pactual == Torre or self.pactual == Rey:
             self.Enroque.contador(self.coo, self.turnoactual)
@@ -86,23 +118,9 @@ class Ajedres:
         get = self.Tablero.GET(coo)
         if self.Check.check_p(coo[0], get):
             self.pactual = seleccionada
-            return True
+            self.turno = True
         else:
-            return False
+            self.turno = False
 
-    def run(self):
-        while not self.victoria:
-            self.Tablero.display()
-            print("Ahora es el turno de:", self.texto[self.turnoactual])
-            self.turno()
-            if not self.escape:
-                self.cambiopeon()
-                self.checklose()
-                self.checkrk()
-                self.__switchturn()
-            else:
-                self.escape = None
-                self.Enroque.contador2(self.turnoactual)
-                self.__switchturn()
 test = Ajedres()
 test.run()
