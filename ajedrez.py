@@ -25,7 +25,7 @@ class Ajedres:
     def _check_(self):
         while not self.turno:
             self.coo, self.plz = self.Check.run()
-            self.checkenroque(self.coo)
+            self._checkenroque_(self.coo)
             if self.oficial:
                 self._seleccionador_(self.coo)
                 if self.turno:
